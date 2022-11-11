@@ -21,7 +21,6 @@ class BirraAdapter: ListAdapter<BirraOb,BirraAdapter.ViewHolder>(DiffCallBack) {
         fun onBind( cerveza:BirraOb){
             id.text=cerveza.id.toString()
             name.text=cerveza.name
-            phone.text=phone.text.toString()
             beerType.text=beerType.text
             view.setOnClickListener{
                 onItemClicListener(cerveza)

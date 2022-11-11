@@ -1,8 +1,9 @@
 package com.e.birra
+import android.os.Parcel
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-data class
-
-Birra(
+data class Birra(
     val id:String,
     val name:String,
     val brewery_type:String,
@@ -20,7 +21,5 @@ Birra(
     val website_url: String,
     val updated_at: String,
     val created_at:String
-
-
 
 )

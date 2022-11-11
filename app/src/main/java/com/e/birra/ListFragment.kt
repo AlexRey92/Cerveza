@@ -18,16 +18,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
-    private lateinit var Adapter:BirraAdapter
+    private var adapter:BirraAdapter=BirraAdapter()
     private val job=Job()
-    private var listadoDeCervezas= mutableListOf<BirraOb>()
+    private var listaDeBirras= mutableListOf<BirraOb>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,8 +34,7 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView.layoutManager=LinearLayoutManager(requireActivity())
-        Adapter= BirraAdapter()
-        recyclerView.adapter=Adapter
+        recyclerView.adapter=adapter
         getListaDeCervezas()
         super.onViewCreated(view, savedInstanceState)
     }
@@ -56,22 +49,20 @@ class ListFragment : Fragment() {
             val call = getRetrofit().create(ApiService::class.java).getBreweryList()
             val response = call.body()
             activity?.runOnUiThread {
-                listadoDeCervezas.clear()
-                if (call.isSuccessful){
-                listadoDeCervezas= response?.let {
-                    parseCerveza(it)
-
-                } ?: mutableListOf()
-                    Adapter.submitList(listadoDeCervezas)
-
+                listaDeBirras.clear()
+                if (call.isSuccessful) {
+                   listaDeBirras=((response?.map { Birra->
+                       Birra.MapearBirra()
+                   } ?: emptyList()) as MutableList<BirraOb>)
+                        adapter.submitList(listaDeBirras)
                 }
-
-
             }
         }
     }
 
-        private fun parseCerveza(cerveza:MutableList<Birra>) : MutableList<BirraOb>{
+
+
+       /* private fun parseCerveza(cerveza: List<Birra>) : List<BirraOb>{
             val listacerveza = mutableListOf<BirraOb>()
             for (beer in cerveza){
                 val id = beer.id
@@ -84,7 +75,7 @@ class ListFragment : Fragment() {
                 listacerveza.add(beerObj)
             }
             return listacerveza
-    }
+    } */
 
 
     private fun getRetrofit():Retrofit{
